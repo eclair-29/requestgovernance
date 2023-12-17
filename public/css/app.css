@@ -1,0 +1,18 @@
+* {
+  border-radius: 0 !important;
+  font-family: 'Poppins', sans-serif;
+}
+
+p, a, div, button, input, label {
+  font-size: 14px !important;
+}
+
+input {
+  box-shadow: none !important;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
