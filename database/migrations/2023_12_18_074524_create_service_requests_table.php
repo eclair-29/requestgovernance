@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateServiceRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,38 +13,39 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('service_requests', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('employee_id', 50)->unique();
-            $table->string('employee_fname', 50);
-            $table->string('employee_lname', 50);
-            $table->string('employee_name', 50);
-            $table->string('email')->unique()->nullable();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('ticket_id')->unique();
+            $table->unsignedBigInteger('application_type_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('approver_id');
             $table->unsignedBigInteger('status_id');
-            $table->unsignedBigInteger('division_id');
-            $table->unsignedBigInteger('site_id');
+            $table->unsignedBigInteger('request_type_id');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
 
             $table
-                ->foreign('status_id')
+                ->foreign('user_id')
                 ->references('id')
-                ->on('statuses')
+                ->on('users')
                 ->onDelete('cascade');
 
             $table
-                ->foreign('division_id')
+                ->foreign('application_type_id')
                 ->references('id')
-                ->on('divisions')
+                ->on('application_types')
                 ->onDelete('cascade');
 
             $table
-                ->foreign('site_id')
+                ->foreign('approver_id')
                 ->references('id')
-                ->on('sites')
+                ->on('approvers')
+                ->onDelete('cascade');
+
+            $table
+                ->foreign('request_type_id')
+                ->references('id')
+                ->on('request_types')
                 ->onDelete('cascade');
         });
     }
@@ -56,6 +57,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('service_requests');
     }
 }
