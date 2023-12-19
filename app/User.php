@@ -42,20 +42,28 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
-    public function hasRole($role)
+    public function status()
     {
-        // todo: translate below eloquent query to raw sql query
-        return $this->roles->where('role_code', $role)->count() > 0;
+        return $this->belongsTo(Status::class);
     }
 
-    public function hasAnyRole($roles)
+    public function division()
     {
-        foreach ($roles as $role) {
-            if ($this->hasRole($role)) {
-                return true;
-            }
-        }
+        return $this->belongsTo(Division::class);
+    }
 
-        return false;
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
+    }
+
+    public function approvers()
+    {
+        return $this->hasMany(Approver::class);
+    }
+
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class);
     }
 }
