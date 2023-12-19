@@ -15,7 +15,7 @@ class CreateServiceRequestsTable extends Migration
     {
         Schema::create('service_requests', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('ticket_id')->unique();
+            $table->string('ticket_id', 50)->unique();
             $table->unsignedBigInteger('application_type_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('approver_id');
@@ -46,6 +46,12 @@ class CreateServiceRequestsTable extends Migration
                 ->foreign('request_type_id')
                 ->references('id')
                 ->on('request_types')
+                ->onDelete('cascade');
+
+            $table
+                ->foreign('status_id')
+                ->references('id')
+                ->on('statuses')
                 ->onDelete('cascade');
         });
     }
