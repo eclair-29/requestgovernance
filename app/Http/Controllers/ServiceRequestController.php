@@ -15,34 +15,7 @@ class ServiceRequestController extends Controller
      */
     public function index()
     {
-        $requests = array(
-            (object)[
-                'id' => '1',
-                'ticket_id' => 'HR12345678',
-                'application_type_id' => 'HRIS Application',
-                'user_id' => 'Miguel De Chavez',
-                'approver_id' => 'John Doe',
-                'status_id' => 'Pending Division Head Approval',
-                'request_type_id' => 'NEW',
-                'created_date' => '2023-12-18 15:52:00',
-                'updated_date' => '2023-12-18 15:52:00',
-            ],
-            (object)[
-                'id' => '2',
-                'ticket_id' => 'UA12345678',
-                'application_type_id' => 'User Account Application',
-                'user_id' => 'Miguel De Chavez',
-                'approver_id' => 'Jane Doe',
-                'status_id' => 'Pending Division Head Approval',
-                'request_type_id' => 'NEW',
-                'created_date' => '2023-12-18 15:52:00',
-                'updated_date' => '2023-12-18 15:52:00',
-            ],
-        );
-
-        $requests = DB::select('SELECT * FROM service_requests');
-
-        // $requests = [];
+        $requests = DB::select('SELECT * FROM vw_service_requests WHERE STATUS_NAME = "Pending"');
 
         return view('requests.index', [
             'user' => 'Miguel',
@@ -79,9 +52,15 @@ class ServiceRequestController extends Controller
      */
     public function show($id)
     {
+        $userDetails = DB::select('SELECT * FROM vw_user_details WHERE id = :id', ['id' => 1])[0];
+
+        $requestDetails = DB::select('SELECT * FROM vw_service_requests WHERE id = :id', ['id' => $id])[0];
+
         return view('requests.show', [
             'requestId' => $id,
             'user' => 'Miguel',
+            'userDetails' => $userDetails,
+            'requestDetails' => $requestDetails
         ]);
     }
 
